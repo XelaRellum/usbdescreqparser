@@ -9,4 +9,9 @@ Current implementation:
 
 - html: a local copy of the original site
 - javascript: simple object oriented rewrite of the javascript code in the web page
-- python: todo
+- python: port of the javascript implementation
+
+## Development Requirements
+
+- Javascript: mise
+- Python: uv
