@@ -1193,7 +1193,7 @@ class Parser {
 			}
 		}
 
-		outTxt += "\r\n// " + inVals.length + " bytes\r\n";
+		outTxt += "\n// " + inVals.length + " bytes\n";
 		return outTxt;
 	}
 	// TODO catch (e) {
@@ -2350,11 +2350,11 @@ class Parser {
 					outTxt += this.pHexC(inVals[i]);
 					this.possible_errors++;
 				}
-				outTxt += "\r\n";
+				outTxt += "\n";
 			}
 		}
 
-		outTxt += "// " + inVals.length + " bytes\r\n";
+		outTxt += "// " + inVals.length + " bytes\n";
 	}
 	// TODO catch (e) {
 	// TODO 	console.log("Error: " + e);
@@ -2540,12 +2540,12 @@ class Parser {
 			}
 			else
 			{
-				outTxt += this.pHexC(inVals[i++]) + "\r\n";
+				outTxt += this.pHexC(inVals[i++]) + "\n";
 				this.possible_errors++;
 			}
 		}
 
-		outTxt += "\r\n// " + inVals.length + " bytes\r\n";
+		outTxt += "\n// " + inVals.length + " bytes\n";
 	}
 	// TODO catch (e) {
 	// TODO 	console.log("Error: " + e);
@@ -2594,7 +2594,7 @@ class Parser {
   		y += "  ";
   	}
   	y += x;
-  	return y + "\r\n";
+  	return y.trimEnd() + "\n";
   }
 
   pDescriptorType(x)
@@ -3119,7 +3119,7 @@ class Parser {
   	{
   		for (var j = 0; j < usage_tbl[i].length; j++)
   		{
-  			str += this.pHex(j) + ":\t" + usage_tbl[i][j] + "\r\n";
+  			str += this.pHex(j) + ":\t" + usage_tbl[i][j] + "\n";
   		}
   	}
   	return str;
@@ -3546,13 +3546,13 @@ class Parser {
 
   sample_hidrepdesc()
   {
-  	var inStr = "05 01 09 04 A1 01 A1 02\r\n85 01 75 08 95 01 15 00\r\n26 FF 00 81 03 75 01 95\r\n13 15 00 25 01 35 00 45\r\n01 05 09 19 01 29 13 81\r\n02 75 01 95 0D 06 00 FF\r\n81 03 15 00 26 FF 00 05\r\n01 09 01 A1 00 75 08 95\r\n04 35 00 46 FF 00 09 30\r\n09 31 09 32 09 35 81 02\r\nC0 05 01 75 08 95 27 09\r\n01 81 02 75 08 95 30 09\r\n01 91 02 75 08 95 30 09\r\n01 B1 02 C0 A1 02 85 02\r\n75 08 95 30 09 01 B1 02\r\nC0 A1 02 85 EE 75 08 95\r\n30 09 01 B1 02 C0 A1 02\r\n85 EF 75 08 95 30 09 01\r\nB1 02 C0 C0\r\n";
+  	var inStr = "05 01 09 04 A1 01 A1 02\n85 01 75 08 95 01 15 00\n26 FF 00 81 03 75 01 95\n13 15 00 25 01 35 00 45\n01 05 09 19 01 29 13 81\n02 75 01 95 0D 06 00 FF\n81 03 15 00 26 FF 00 05\n01 09 01 A1 00 75 08 95\n04 35 00 46 FF 00 09 30\n09 31 09 32 09 35 81 02\nC0 05 01 75 08 95 27 09\n01 81 02 75 08 95 30 09\n01 91 02 75 08 95 30 09\n01 B1 02 C0 A1 02 85 02\n75 08 95 30 09 01 B1 02\nC0 A1 02 85 EE 75 08 95\n30 09 01 B1 02 C0 A1 02\n85 EF 75 08 95 30 09 01\nB1 02 C0 C0\n";
   	return this.go_parse_hidrepdesc(inStr);
   }
 
   sample_stddesc()
   {
-  	var inStr = "12 01 00 02 00 00 00 40\r\n4C 05 68 02 00 01 01 02\r\n00 01\r\n09 02 29 00 01 01 00 80\r\nFA 09 04 00 00 02 03 00\r\n00 00 09 21 11 01 00 01\r\n22 94 00 07 05 02 03 40\r\n00 01 07 05 81 03 40 00\r\n01\r\n";
+  	var inStr = "12 01 00 02 00 00 00 40\n4C 05 68 02 00 01 01 02\n00 01\n09 02 29 00 01 01 00 80\nFA 09 04 00 00 02 03 00\n00 00 09 21 11 01 00 01\n22 94 00 07 05 02 03 40\n00 01 07 05 81 03 40 00\n01\n";
   	return this.go_parse_stddesc(inStr);
   }
 
@@ -3576,27 +3576,27 @@ class Parser {
 
   	if (hid_errs < stddesc_errs && hid_errs < stdreq_errs) {
   		outTxt = this.go_parse_hidrepdesc(inTxt);
-  		outTxt += "\r\n// best guess: USB HID Report Descriptor";
+  		outTxt += "\n// best guess: USB HID Report Descriptor";
   	}
   	else if (stddesc_errs < hid_errs && stddesc_errs < stdreq_errs) {
   		outTxt = this.go_parse_stddesc(inTxt);
-  		outTxt += "\r\n// best guess: USB Standard Descriptor";
+  		outTxt += "\n// best guess: USB Standard Descriptor";
   	}
   	else if (stdreq_errs < hid_errs && stdreq_errs < stddesc_errs) {
   		outTxt = this.go_parse_stdrequest(inTxt);
-  		outTxt += "\r\n// best guess: USB Standard Request";
+  		outTxt += "\n// best guess: USB Standard Request";
   	}
   	else if (hid_errs <= stddesc_errs && hid_errs <= stdreq_errs) {
   		outTxt = this.go_parse_hidrepdesc(inTxt);
-  		outTxt += "\r\n// best guess: USB HID Report Descriptor";
+  		outTxt += "\n// best guess: USB HID Report Descriptor";
   	}
   	else if (stddesc_errs <= hid_errs && stddesc_errs <= stdreq_errs) {
   		this.go_parse_stddesc(inTxt);
-  		outTxt += "\r\n// best guess: USB Standard Descriptor";
+  		outTxt += "\n// best guess: USB Standard Descriptor";
   	}
   	else if (stdreq_errs <= hid_errs && stdreq_errs <= stddesc_errs) {
   		this.go_parse_stdrequest(inTxt);
-  		outTxt += "\r\n// best guess: USB Standard Request";
+  		outTxt += "\n// best guess: USB Standard Request";
   	}
   	else {
   		outTxt = "// unable to determine data packet type";
