@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/XelaRellum/usbdescreqparser/issues"
   },
-  "homepage": "https://github.com/XelaRellum/usbdescreqparser#readme"
+  "homepage": "https://github.com/XelaRellum/usbdescreqparser#readme",
+  "dependencies": {
+    "jest": "^29.7.0"
+  }
 }
