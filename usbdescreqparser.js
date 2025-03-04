@@ -1857,11 +1857,11 @@ class Parser {
 								outTxt += this.pindentComment("wTotalLength " + wTotalLength.toString(10), 2);
 								i++; j--;
 							}
-							var bincollection = -1;
+							var binCollection = -1;
 							if (i < inVals.length && j > 0) {
 								outTxt += this.pHexC(inVals[i]);
-								bincollection = inVals[i];
-								outTxt += this.pindentComment("bincollection " + this.pHex(bincollection), 1);
+								binCollection = inVals[i];
+								outTxt += this.pindentComment("binCollection " + this.pHex(binCollection), 1);
 								i++; j--;
 							}
 							while (j > 0)
