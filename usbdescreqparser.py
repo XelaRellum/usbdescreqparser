@@ -2135,15 +2135,12 @@ class Parser:
         self.possible_errors = 0
 
     def pindentComment(self, x, bs):
-        y = " //   "
-        preSpace = max(2 - bs, 0)
-
-        for _ in range(preSpace):
-            y = "      " + y
-
-        for _ in range(self.indent):
-            y += "  "
-
+        y = " // "
+        preSpace = 2 - bs
+        if preSpace < 0:
+            preSpace = 0
+        y = (" " * 6 * preSpace) + y
+        y += "  " * self.indent
         y += x
         return y.rstrip() + "\n"
 
@@ -3138,6 +3135,7 @@ class Parser:
     # XXXX
 
     def parse_stddesc(self, inTxt: str) -> str:
+        self.indent = 0
         self.possible_errors = 0
         inVals = get_bytes(inTxt)
 
@@ -4115,7 +4113,7 @@ class Parser:
 
                             arrSz = bLength - 1 - 6
                             arrSz /= 2
-                            for bmaControlsIdx in range(int(arrSz)):
+                            for bmaControlsIdx in range(round(arrSz)):
                                 bmaControls = -1
                                 if i < len(inVals) and j > 0:
                                     outTxt += pHexC(inVals[i])
@@ -4169,9 +4167,10 @@ class Parser:
                                     i += 1
                                     j -= 1
 
+                            iFeature = -1
                             if i < len(inVals) and j > 0:
+                                outTxt += pHexC(inVals[i])
                                 iFeature = inVals[i]
-                                outTxt += pHexC(iFeature)
                                 outTxt += self.pindentComment("iFeature", 1)
                                 i += 1
                                 j -= 1
