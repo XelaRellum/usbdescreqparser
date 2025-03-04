@@ -1208,6 +1208,7 @@ class Parser {
   {
 	// TODO try
 	{
+		this.indent = 0;
 		this.possible_errors = 0;
 		var inVals = get_bytes(inTxt);
 
