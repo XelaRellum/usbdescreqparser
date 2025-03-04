@@ -2547,6 +2547,328 @@ class Parser:
 
             return " (" + pHex(v) + ")"
 
+    def pTerminalType(self, v):
+        if v == 0x0100:
+            return " (USB Undefined)"
+        elif v == 0x0101:
+            return " (USB Streaming)"
+        elif v == 0x01FF:
+            return " (USB Vendor Defined)"
+        elif v == 0x0200:
+            return " (Input Undefined)"
+        elif v == 0x0201:
+            return " (Microphone)"
+        elif v == 0x0202:
+            return " (Desktop Microphone)"
+        elif v == 0x0203:
+            return " (Personal Microphone)"
+        elif v == 0x0204:
+            return " (Omni Directional Microphone)"
+        elif v == 0x0205:
+            return " (Microphone Array)"
+        elif v == 0x0206:
+            return " (Processing Microphone Array)"
+        elif v == 0x0300:
+            return " (Output Undefined)"
+        elif v == 0x0301:
+            return " (Speaker)"
+        elif v == 0x0302:
+            return " (Headphones)"
+        elif v == 0x0303:
+            return " (Head Mounted Display Audio)"
+        elif v == 0x0304:
+            return " (Desktop Speaker)"
+        elif v == 0x0305:
+            return " (Room Speaker)"
+        elif v == 0x0306:
+            return " (Communication Speaker)"
+        elif v == 0x0307:
+            return " (Low Freq Effects Speaker)"
+        elif v == 0x0400:
+            return " (Bi-directional Undefined)"
+        elif v == 0x0401:
+            return " (Handset)"
+        elif v == 0x0402:
+            return " (Headset)"
+        elif v == 0x0403:
+            return " (Speakerphone, no echo reduction)"
+        elif v == 0x0404:
+            return " (Speakerphone, echo-suppressing)"
+        elif v == 0x0405:
+            return " (Speakerphone, echo-canceling)"
+        elif v == 0x0500:
+            return " (Telephony Undefined)"
+        elif v == 0x0501:
+            return " (Phone Line)"
+        elif v == 0x0502:
+            return " (Telephone)"
+        elif v == 0x0503:
+            return " (Down Line Phone)"
+        elif v == 0x0600:
+            return " (External Undefined)"
+        elif v == 0x0601:
+            return " (Analog Connector)"
+        elif v == 0x0602:
+            return " (Digital Audio Interface)"
+        elif v == 0x0603:
+            return " (Line Connector)"
+        elif v == 0x0604:
+            return " (Legacy Audio Connector)"
+        elif v == 0x0605:
+            return " (S/PDIF Interface)"
+        elif v == 0x0606:
+            return " (1394 DA Stream)"
+        elif v == 0x0607:
+            return " (1394 DV Stream Soundtrack)"
+        elif v == 0x0700:
+            return " (Embedded Undefined)"
+        elif v == 0x0701:
+            return " (Level Calibration Noise Source)"
+        elif v == 0x0702:
+            return " (Equalization Noise)"
+        elif v == 0x0703:
+            return " (CD player)"
+        elif v == 0x0704:
+            return " (DAT)"
+        elif v == 0x0705:
+            return " (DCC)"
+        elif v == 0x0706:
+            return " (MiniDisk)"
+        elif v == 0x0707:
+            return " (Analog Tape)"
+        elif v == 0x0708:
+            return " (Phonograph)"
+        elif v == 0x0709:
+            return " (VCR Audio)"
+        elif v == 0x070A:
+            return " (Video Disc Audio)"
+        elif v == 0x070B:
+            return " (DVD Audio)"
+        elif v == 0x070C:
+            return " (TV Tuner Audio)"
+        elif v == 0x070D:
+            return " (Satellite Receiver Audio)"
+        elif v == 0x070E:
+            return " (Cable Tuner Audio)"
+        elif v == 0x070F:
+            return " (DSS Audio)"
+        elif v == 0x0710:
+            return " (Radio Receiver)"
+        elif v == 0x0711:
+            return " (Radio Transmitter)"
+        elif v == 0x0712:
+            return " (Multi-track Recorder)"
+        elif v == 0x0713:
+            return " (Synthesizer)"
+        else:
+            return ""
+        
+    def pChannelConfig(self, v):
+        s = ""
+        if (v & ((1 << 0) | (1 << 1))) == ((1 << 0) | (1 << 1)):
+            s += "Left and Right Front, "
+        else:
+            if (v & (1 << 0)) != 0:
+                s += "Left Front, "
+            if (v & (1 << 1)) != 0:
+                s += "Right Front, "
+        
+        if (v & (1 << 2)) != 0:
+            s += "Center Front, "
+        if (v & (1 << 3)) != 0:
+            s += "Low Freq Enh, "
+        
+        if (v & ((1 << 4) | (1 << 5))) == ((1 << 4) | (1 << 5)):
+            s += "Left and Right Surround, "
+        else:
+            if (v & (1 << 4)) != 0:
+                s += "Left Surround, "
+            if (v & (1 << 5)) != 0:
+                s += "Right Surround, "
+        
+        if (v & ((1 << 6) | (1 << 7))) == ((1 << 6) | (1 << 7)):
+            s += "Left and Right of Center, "
+        else:
+            if (v & (1 << 6)) != 0:
+                s += "Left of Center, "
+            if (v & (1 << 7)) != 0:
+                s += "Right of Center, "
+        
+        if (v & (1 << 8)) != 0:
+            s += "Surround, "
+        
+        if (v & ((1 << 9) | (1 << 10))) == ((1 << 9) | (1 << 10)):
+            s += "Side Left and Right, "
+        else:
+            if (v & (1 << 9)) != 0:
+                s += "Side Left, "
+            if (v & (1 << 10)) != 0:
+                s += "Side Right, "
+        
+        if (v & (1 << 11)) != 0:
+            s += "Top, "
+        
+        # Remove leading/trailing commas and spaces, and replace multiple commas with a single one
+        s = re.sub(r'^[,\s]+|[,\s]+$', '', s)
+        s = re.sub(r'\s*,\s*', ',', s)
+        s = s.strip()
+        
+        if s:
+            return f" ({s})"
+        return ""
+
+    def pWaveFormat(self, v):
+        s = ""
+        if v == 0x0000:
+            s = "TYPE_I_UNDEFINED"
+        elif v == 0x0001:
+            s = "PCM"
+        elif v == 0x0002:
+            s = "PCM8"
+        elif v == 0x0003:
+            s = "IEEE_FLOAT"
+        elif v == 0x0004:
+            s = "ALAW"
+        elif v == 0x0005:
+            s = "MULAW"
+        elif v == 0x1000:
+            s = "TYPE_II_UNDEFINED"
+        elif v == 0x1001:
+            s = "MPEG"
+        elif v == 0x1002:
+            s = "AC-3"
+        elif v == 0x2000:
+            s = "TYPE_III_UNDEFINED"
+        elif v == 0x2001:
+            s = "IEC1937_AC-3"
+        elif v == 0x2002:
+            s = "IEC1937_MPEG-1_Layer1"
+        elif v == 0x2003:
+            s = "IEC1937_MPEG-1_Layer2/3 or IEC1937_MPEG-2_NOEXT"
+        elif v == 0x2004:
+            s = "IEC1937_MPEG-2_EXT"
+        elif v == 0x2005:
+            s = "IEC1937_MPEG-2_Layer1_LS"
+        elif v == 0x2006:
+            s = "IEC1937_MPEG-2_Layer2/3_LS"
+        
+        """
+        if v == 0x0000: s = "UNKNOWN"
+        if v == 0x0001: s = "PCM"
+        if v == 0x0002: s = "ADPCM"
+        if v == 0x0003: s = "IEEE_FLOAT"
+        if v == 0x0004: s = "VSELP"
+        if v == 0x0005: s = "IBM_CSVD"
+        if v == 0x0006: s = "ALAW"
+        if v == 0x0007: s = "MULAW"
+        if v == 0x0010: s = "OKI_ADPCM"
+        if v == 0x0011: s = "DVI_ADPCM"
+        if v == 0x0012: s = "MEDIASPACE_ADPCM"
+        if v == 0x0013: s = "SIERRA_ADPCM"
+        if v == 0x0014: s = "G723_ADPCM"
+        if v == 0x0015: s = "DIGISTD"
+        if v == 0x0016: s = "DIGIFIX"
+        if v == 0x0017: s = "DIALOGIC_OKI_ADPCM"
+        if v == 0x0018: s = "MEDIAVISION_ADPCM"
+        if v == 0x0019: s = "CU_CODEC"
+        if v == 0x0020: s = "YAMAHA_ADPCM"
+        if v == 0x0021: s = "SONARC"
+        if v == 0x0022: s = "TRUESPEECH"
+        if v == 0x0023: s = "ECHOSC1"
+        if v == 0x0024: s = "AUDIOFILE_AF36"
+        if v == 0x0025: s = "APTX"
+        if v == 0x0026: s = "AUDIOFILE_AF10"
+        if v == 0x0027: s = "PROSODY_1612"
+        if v == 0x0028: s = "LRC"
+        if v == 0x0030: s = "AC2"
+        if v == 0x0031: s = "GSM610"
+        if v == 0x0032: s = "MSNAUDIO"
+        if v == 0x0033: s = "ANTEX_ADPCME"
+        if v == 0x0034: s = "CONTROL_RES_VQLPC"
+        if v == 0x0035: s = "DIGIREAL"
+        if v == 0x0036: s = "DIGIADPCM"
+        if v == 0x0037: s = "CONTROL_RES_CR10"
+        if v == 0x0038: s = "VBXADPCM"
+        if v == 0x0039: s = "ROLAND_RDAC"
+        if v == 0x003A: s = "ECHOSC3"
+        if v == 0x003B: s = "ROCKWELL_ADPCM"
+        if v == 0x003C: s = "ROCKWELL_DIGITALK"
+        if v == 0x003D: s = "XEBEC"
+        if v == 0x0040: s = "G721_ADPCM"
+        if v == 0x0041: s = "G728_CELP"
+        if v == 0x0042: s = "MSG723"
+        if v == 0x0050: s = "MPEG"
+        if v == 0x0051: s = "RT24"
+        if v == 0x0051: s = "PAC"
+        if v == 0x0055: s = "MPEGLAYER3"
+        if v == 0x0059: s = "CIRRUS"
+        if v == 0x0061: s = "ESPCM"
+        if v == 0x0062: s = "VOXWARE"
+        if v == 0x0063: s = "CANOPUS_ATRAC"
+        if v == 0x0064: s = "G726_ADPCM"
+        if v == 0x0065: s = "G722_ADPCM"
+        if v == 0x0066: s = "DSAT"
+        if v == 0x0067: s = "DSAT_DISPLAY"
+        if v == 0x0069: s = "VOXWARE_BYTE_ALIGNED"
+        if v == 0x0070: s = "VOXWARE_AC8"
+        if v == 0x0071: s = "VOXWARE_AC10"
+        if v == 0x0072: s = "VOXWARE_AC16"
+        if v == 0x0073: s = "VOXWARE_AC20"
+        if v == 0x0074: s = "VOXWARE_RT24"
+        if v == 0x0075: s = "VOXWARE_RT29"
+        if v == 0x0076: s = "VOXWARE_RT29HW"
+        if v == 0x0077: s = "VOXWARE_VR12"
+        if v == 0x0078: s = "VOXWARE_VR18"
+        if v == 0x0079: s = "VOXWARE_TQ40"
+        if v == 0x0080: s = "SOFTSOUND"
+        if v == 0x0081: s = "VOXWARE_TQ60"
+        if v == 0x0082: s = "MSRT24"
+        if v == 0x0083: s = "G729A"
+        if v == 0x0084: s = "MVI_MV12"
+        if v == 0x0085: s = "DF_G726"
+        if v == 0x0086: s = "DF_GSM610"
+        if v == 0x0088: s = "ISIAUDIO"
+        if v == 0x0089: s = "ONLIVE"
+        if v == 0x0091: s = "SBC24"
+        if v == 0x0092: s = "DOLBY_AC3_SPDIF"
+        if v == 0x0097: s = "ZYXEL_ADPCM"
+        if v == 0x0098: s = "PHILIPS_LPCBB"
+        if v == 0x0099: s = "PACKED"
+        if v == 0x0100: s = "RHETOREX_ADPCM"
+        if v == 0x0101: s = "IRAT"
+        if v == 0x0111: s = "VIVO_G723"
+        if v == 0x0112: s = "VIVO_SIREN"
+        if v == 0x0123: s = "DIGITAL_G723"
+        if v == 0x0200: s = "CREATIVE_ADPCM"
+        if v == 0x0202: s = "CREATIVE_FASTSPEECH8"
+        if v == 0x0203: s = "CREATIVE_FASTSPEECH10"
+        if v == 0x0220: s = "QUARTERDECK"
+        if v == 0x0300: s = "FM_TOWNS_SND"
+        if v == 0x0400: s = "BTV_DIGITAL"
+        if v == 0x0680: s = "VME_VMPCM"
+        if v == 0x1000: s = "OLIGSM"
+        if v == 0x1001: s = "OLIADPCM"
+        if v == 0x1002: s = "OLICELP"
+        if v == 0x1003: s = "OLISBC"
+        if v == 0x1004: s = "OLIOPR"
+        if v == 0x1100: s = "LH_CODEC"
+        if v == 0x1400: s = "NORRIS"
+        if v == 0x1401: s = "ISIAUDIO"
+        if v == 0x1500: s = "SOUNDSPACE_MUSICOMPRESS"
+        if v == 0x2000: s = "DVM"
+        if v == 0xFFFE: s = "EXTENSIBLE"
+        if v == 0xFFFF: s = "DEVELOPMENT"
+        if v == 0x0101: s = "IBM_MULAW"
+        if v == 0x0102: s = "IBM_ALAW"
+        if v == 0x0103: s = "IBM_ADPCM"
+        if v == 0x0160: s = "DIVX_AUDIO160"
+        if v == 0x0161: s = "DIVX_AUDIO161"
+        """
+        
+        if s:
+            return f" ({s})"
+        return ""
+
     def parse_hidrepdesc(self, inTxt):
         self.possible_errors = 0
         inVals = get_bytes(inTxt)
@@ -3425,13 +3747,13 @@ class Parser:
                                 if (bmAttributes & 0x04) != 0:
                                     atrstr += "Packet Padding"
 
-                                if atrstr.length <= 0:
+                                if len(atrstr) <= 0:
                                     atrstr = "None"
 
                                 atrstr = re.sub(r"^[,\s]+|[,\s]+$", "", atrstr)
                                 atrstr = re.sub(r"\s*,\s*", ",", atrstr)
-                                atrstr = atrstr.trim()
-                                if atrstr.length > 0:
+                                atrstr = atrstr.strip()
+                                if len(atrstr) > 0:
                                     atrstr = " (" + atrstr + ")"
 
                                 outTxt += self.pindentComment(
@@ -3523,12 +3845,12 @@ class Parser:
                                 i += 1
                                 j -= 1
 
-                            bincollection = -1
+                            binCollection = -1
                             if i < len(inVals) and j > 0:
                                 outTxt += pHexC(inVals[i])
-                                bincollection = inVals[i]
+                                binCollection = inVals[i]
                                 outTxt += self.pindentComment(
-                                    "bincollection " + pHex(bincollection), 1
+                                    "binCollection " + pHex(binCollection), 1
                                 )
                                 i += 1
                                 j -= 1
@@ -3793,7 +4115,7 @@ class Parser:
 
                             arrSz = bLength - 1 - 6
                             arrSz /= 2
-                            for bmaControlsIdx in range(arrSz):
+                            for bmaControlsIdx in range(int(arrSz)):
                                 bmaControls = -1
                                 if i < len(inVals) and j > 0:
                                     outTxt += pHexC(inVals[i])
@@ -3833,8 +4155,8 @@ class Parser:
                                         r"^[,\s]+|[,\s]+$", "", bmaAudCtrls
                                     )
                                     bmaAudCtrls = re.sub(r"s*,\s*", ",", bmaAudCtrls)
-                                    bmaAudCtrls = bmaAudCtrls.trim()
-                                    if bmaAudCtrls.length > 0:
+                                    bmaAudCtrls = bmaAudCtrls.strip()
+                                    if len(bmaAudCtrls) > 0:
                                         bmaAudCtrls = " (" + bmaAudCtrls + ")"
 
                                     else:
